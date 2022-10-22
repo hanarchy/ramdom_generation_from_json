@@ -15,6 +15,7 @@ import gradio as gr
 from modules.processing import Processed, process_images
 from PIL import Image
 from modules.shared import opts, cmd_opts, state
+from modules import sd_samplers
 
 
 def open_folder(f):
@@ -100,7 +101,10 @@ class Script(scripts.Script):
                         width, height = choice_image_size(data, k)
                         job.update({"width": width})
                         job.update({"height": height})
-
+                    elif re.match(r"sampler", k):
+                        for idx, name in enumerate(sd_samplers.samplers):
+                          if v in name:
+                            job.update({"sampler_index": idx})
                     else:
                         job.update({k: v})
 
